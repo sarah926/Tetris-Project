@@ -3,17 +3,11 @@ package sample;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import javax.xml.transform.Result;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.TimerTask;
 
@@ -42,12 +36,14 @@ public class Game extends Parent {
 
     Text over = new Text("GAME OVER");
     Text n = new Text("click n for a new game");
+
     //empty constructor
-    public Game(){
+    public Game() {
 
     }
+
     //set up game
-    public void setUp(){
+    public void setUp() {
         //get user input
         getScene().setOnKeyReleased(
 
@@ -66,13 +62,13 @@ public class Game extends Parent {
         scoreValue.setY(10);
 
         //add elements to screen
-        getChildren().addAll(board,scoreLabel,scoreValue);
+        getChildren().addAll(board, scoreLabel, scoreValue);
 
         //timer to continuously move down block
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(pause == false) {
+                if (pause == false) {
                     board.moveDownIfCan();
                 }
             }
@@ -80,11 +76,11 @@ public class Game extends Parent {
         }, 500, 400);
 
         //animation loop that runs the game
-        new AnimationTimer(){
+        new AnimationTimer() {
 
-            public void handle(long currentNanoTime){
+            public void handle(long currentNanoTime) {
                 //only runs if the game isn't over
-                if(end == false) {
+                if (end == false) {
 
                     //moves based on keyboard input
                     if (input == "LEFT") {
@@ -101,18 +97,24 @@ public class Game extends Parent {
                     } else if (input == "R") {
                         System.out.println("resume");
                         resumeGame();
+                    } else if(input == "SPACE"){
+                        System.out.println("space");
+                        while(board.canMoveDown()){
+                            board.moveDownIfCan();
+                        }
+
                     }
                 }
                 //if click n, make new game
-                if (input == "N"){
+                if (input == "N") {
                     board.newBoard();
                     end = false;
-                    getChildren().removeAll(high,over,highs,n,r);
+                    getChildren().removeAll(high, over, highs, n, r);
                 }
                 //reset input
                 input = "";
                 //if not done,
-                if(end == false) {
+                if (end == false) {
                     board.goToNextIfNeed();
                     board.deleteRowIfNeed();
                 }
@@ -120,7 +122,7 @@ public class Game extends Parent {
                 scoreValue.setText(String.valueOf(board.score));
 
                 //if game is over
-                if(end == false && board.isEndGame()==true){
+                if (end == false && board.isEndGame() == true) {
 
                     //creating database
                     try (Statement query = Controller.conn.createStatement()) {
@@ -142,7 +144,7 @@ public class Game extends Parent {
                     r.setOpacity(.6);
                     getChildren().add(r);
                     //display score and highest score
-                    high.setText("your score was "+ board.score);
+                    high.setText("your score was " + board.score);
                     highs.setText("your highest score ever is " + highest);
 
                     over.setX(100);
@@ -165,7 +167,7 @@ public class Game extends Parent {
                     n.setFont(f);
                     n.toFront();
                     //add ending elements to screen
-                    getChildren().addAll(high,over,highs,n);
+                    getChildren().addAll(high, over, highs, n);
                     //reset end to true so it only runs once
                     end = true;
                 }
@@ -173,13 +175,15 @@ public class Game extends Parent {
             }
         }.start();
     }
+
     //set pause to true when game paused
-    public void pauseGame(){
+    public void pauseGame() {
         pause = true;
 
     }
+
     //set pause to false when resume game
-    public void resumeGame(){
+    public void resumeGame() {
         pause = false;
     }
 

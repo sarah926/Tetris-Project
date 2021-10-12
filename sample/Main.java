@@ -8,18 +8,18 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     //makes database
-    public static void makeDB(){
+    public static void makeDB() {
         Controller.dataBase();
     }
 
     //sets scene to start on fxml
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Tetris Game Clone");
 
-        Scene scene = new Scene(root,350,475);
+        Scene scene = new Scene(root, 350, 475);
         primaryStage.setScene(scene);
         primaryStage.show();
 
